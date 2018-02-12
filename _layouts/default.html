@@ -27,18 +27,18 @@
           </div>
 
           <nav>
-            <a href="{{ site.baseurl }}/">Blog</a>
-            <a href="{{ site.baseurl }}/">Adventures</a>
-            <!--   dropdown contents:
-            * Hadrian's Wall Path?
-            * John Muir Trail
-            * UBES (general)
-            * Lofoten
-            * Georgia
-            * TCT 2019
-            -->
-            <a href="{{ site.baseurl }}/tech">Tech</a>
-            <a href="{{ site.baseurl }}/about">About</a>
+            {% for nav in site.nav %}
+                {% if nav.subcategories != null %}
+                    <a href="{{ site.url }}{{ nav.url }}">{{ nav.title }} ▼</a>
+                    {% for subcategory in nav.subcategories %}
+                    <a href="{{ site.url }}{{ subcategory.subhref }}">{{ subcategory.subtitle }}</a>
+                    {% endfor %}
+                {% elsif nav.title == page.title %}
+                     <a href="{{ nav.url }}">{{ nav.title }}</a>
+                {% else %}
+                    <a href="{{ site.url }}{{ nav.href }}">{{ nav.title }}</a>
+                {% endif %}
+              {% endfor %}
           </nav>
         </header>
       </div>
