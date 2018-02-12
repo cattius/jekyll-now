@@ -1,7 +1,9 @@
 ---
-layout:   blog_index
-title:    Tag
+layout: page
+title: Tags
+permalink: /tags/
 ---
+
 {% comment%}
 Here we generate all the tags.
 {% endcomment%}
@@ -29,11 +31,6 @@ Here we generate all the tags.
 {% endif %}
 {% endfor %}
 
-<h1 class="page-title">
-  <a href="/blog">Blog</a> | {{ page.title }}
-</h1>
-<br/>
-
 <div class="posts">
 <p>
 {% for tag in tags %}
@@ -60,5 +57,4 @@ Here we generate all the tags.
   {% endfor %}
 </ul>
 {% endfor %}
-
 </div>
