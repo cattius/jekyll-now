@@ -27,7 +27,7 @@
           </div>
 
           <nav>
-            {% for nav in site.nav %}
+            {% for nav in site.data.nav %}
                 {% if nav.subcategories != null %}
                     <a href="{{ site.url }}{{ nav.url }}">{{ nav.title }} ▼</a>
                     {% for subcategory in nav.subcategories %}
