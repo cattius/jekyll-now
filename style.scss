@@ -238,13 +238,11 @@ nav {
   }
 }
 
-/* The dropdown container */
 .dropdown {
  float: left;
  overflow: hidden;
 }
 
-/* Dropdown button */
 .dropdown .dropdown-btn {
  font-size: 18px;
  border: none;
@@ -254,7 +252,6 @@ nav {
  margin: 0; /* Important for vertical align on mobile phones */
 }
 
-/* Dropdown content (hidden by default) */
 .dropdown-content {
  font-size: 16px;
  display: none;
@@ -264,13 +261,17 @@ nav {
  z-index: 1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
  float: none;
  color: black;
  text-decoration: none;
  display: block;
  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
 }
 
 /* Show the dropdown menu on hover */
