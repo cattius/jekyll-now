@@ -47,11 +47,20 @@
     effect: "'fade'"
 
 # chamonix slider
-# TODO
 - selector: chamonix_slider
   captions: false
   images:
-    - src: /images/1.jpg
+    - src: /images/chamonix/1.jpg
+    - src: /images/chamonix/2.jpg
+    - src: /images/chamonix/3.jpg
+    - src: /images/chamonix/4.jpg
+    - src: /images/chamonix/5.jpg
+    - src: /images/chamonix/6.jpg
+    - src: /images/chamonix/7.jpg
+    - src: /images/chamonix/8.jpg
+    - src: /images/chamonix/9.jpg
+    - src: /images/chamonix/10.jpg
+    - src: /images/chamonix/11.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"
