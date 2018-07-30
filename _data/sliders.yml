@@ -57,7 +57,6 @@
 # svaneti slider
 - selector: svaneti_slider
   captions: false
-  bullets: true
   images:
     - src: /images/georgia/1.jpg
     - src: /images/georgia/2.jpg
@@ -73,12 +72,11 @@
     - src: /images/georgia/12.jpg
   settings:
     height: "'auto'"
-    effect: "'slide'"
+    effect: "'fade'"
 
 # armenia alaverdi-dilijan slider
 - selector: armenia_slider
   captions: false
-  bullets: true
   images:
     - src: /images/armenia/1.jpg
     - src: /images/armenia/2.jpg
@@ -91,7 +89,7 @@
     - src: /images/armenia/9.jpg
   settings:
     height: "'auto'"
-    effect: "'slide'"
+    effect: "'fade'"
 
 # balkans slider
 - selector: balkans_slider
