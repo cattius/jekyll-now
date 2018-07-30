@@ -1,27 +1,28 @@
 # hadrian's wall slider
 - selector: hadrians_slider
-  captions: true
+  captions: false
   images:
-    - src: /images/1.jpg
-      alt: image one
-    - src: /images/2.jpg
-      alt: image two
-    - src: /images/3.jpg
-      alt: image three
+    - src: /images/hadrians/1.jpg
+    - src: /images/hadrians/2.jpg
+    - src: /images/hadrians/3.jpg
+    - src: /images/hadrians/4.jpg
+    - src: /images/hadrians/5.jpg
+    - src: /images/hadrians/6.jpg
+    - src: /images/hadrians/7.jpg
+    - src: /images/hadrians/8.jpg
+    - src: /images/hadrians/9.jpg
+    - src: /images/hadrians/10.jpg
+    - src: /images/hadrians/11.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"
 
 # jmt slider
+# TODO
 - selector: jmt_slider
-  captions: true
+  captions: false
   images:
     - src: /images/1.jpg
-      alt: image one
-    - src: /images/2.jpg
-      alt: image two
-    - src: /images/3.jpg
-      alt: image three
   settings:
     height: "'auto'"
     effect: "'fade'"
@@ -46,15 +47,11 @@
     effect: "'fade'"
 
 # chamonix slider
+# TODO
 - selector: chamonix_slider
-  captions: true
+  captions: false
   images:
     - src: /images/1.jpg
-      alt: image one
-    - src: /images/2.jpg
-      alt: image two
-    - src: /images/3.jpg
-      alt: image three
   settings:
     height: "'auto'"
     effect: "'fade'"
@@ -97,15 +94,11 @@
     effect: "'fade'"
 
 # balkans slider
+# TODO
 - selector: balkans_slider
-  captions: true
+  captions: false
   images:
     - src: /images/1.jpg
-      alt: image one
-    - src: /images/2.jpg
-      alt: image two
-    - src: /images/3.jpg
-      alt: image three
   settings:
     height: "'auto'"
     effect: "'fade'"
