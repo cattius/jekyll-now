@@ -28,14 +28,19 @@
 
 # lofoten slider
 - selector: lofoten_slider
-  captions: true
+  captions: false
   images:
-    - src: /images/1.jpg
-      alt: image one
-    - src: /images/2.jpg
-      alt: image two
-    - src: /images/3.jpg
-      alt: image three
+    - src: /images/lofoten/1.jpg
+    - src: /images/lofoten/2.jpg
+    - src: /images/lofoten/3.jpg
+    - src: /images/lofoten/4.jpg
+    - src: /images/lofoten/5.jpg
+    - src: /images/lofoten/6.jpg
+    - src: /images/lofoten/7.jpg
+    - src: /images/lofoten/8.jpg
+    - src: /images/lofoten/9.jpg
+    - src: /images/lofoten/10.jpg
+    - src: /images/lofoten/11.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"
