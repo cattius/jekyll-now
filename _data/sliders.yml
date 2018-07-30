@@ -1,0 +1,108 @@
+# hadrian's wall slider
+- selector: hadrians_slider
+  captions: true
+  images:
+    - src: /images/1.jpg
+      alt: image one
+    - src: /images/2.jpg
+      alt: image two
+    - src: /images/3.jpg
+      alt: image three
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# jmt slider
+- selector: jmt_slider
+  captions: true
+  images:
+    - src: /images/1.jpg
+      alt: image one
+    - src: /images/2.jpg
+      alt: image two
+    - src: /images/3.jpg
+      alt: image three
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# lofoten slider
+- selector: lofoten_slider
+  captions: true
+  images:
+    - src: /images/1.jpg
+      alt: image one
+    - src: /images/2.jpg
+      alt: image two
+    - src: /images/3.jpg
+      alt: image three
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# chamonix slider
+- selector: chamonix_slider
+  captions: true
+  images:
+    - src: /images/1.jpg
+      alt: image one
+    - src: /images/2.jpg
+      alt: image two
+    - src: /images/3.jpg
+      alt: image three
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# svaneti slider
+- selector: svaneti_slider
+  captions: false
+  bullets: true
+  images:
+    - src: /images/georgia/1.jpg
+    - src: /images/georgia/2.jpg
+    - src: /images/georgia/3.jpg
+    - src: /images/georgia/4.jpg
+    - src: /images/georgia/5.jpg
+    - src: /images/georgia/6.jpg
+    - src: /images/georgia/7.jpg
+    - src: /images/georgia/8.jpg
+    - src: /images/georgia/9.jpg
+    - src: /images/georgia/10.jpg
+    - src: /images/georgia/11.jpg
+    - src: /images/georgia/12.jpg
+  settings:
+    height: "'auto'"
+    effect: "'slide'"
+
+# armenia alaverdi-dilijan slider
+- selector: armenia_slider
+  captions: false
+  bullets: true
+  images:
+    - src: /images/armenia/1.jpg
+    - src: /images/armenia/2.jpg
+    - src: /images/armenia/3.jpg
+    - src: /images/armenia/4.jpg
+    - src: /images/armenia/5.jpg
+    - src: /images/armenia/6.jpg
+    - src: /images/armenia/7.jpg
+    - src: /images/armenia/8.jpg
+    - src: /images/armenia/9.jpg
+  settings:
+    height: "'auto'"
+    effect: "'slide'"
+
+# balkans slider
+- selector: balkans_slider
+  captions: true
+  images:
+    - src: /images/1.jpg
+      alt: image one
+    - src: /images/2.jpg
+      alt: image two
+    - src: /images/3.jpg
+      alt: image three
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
