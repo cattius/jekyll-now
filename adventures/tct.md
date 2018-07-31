@@ -14,7 +14,7 @@ In June and July 2017 I led a team of 13 on a UBES expedition to Svaneti, Georgi
 {% include slider.html selector="svaneti_slider" %}
 
 # Alaverdi - Haghartsin
-In July 2018 I hiked an unbuilt 100km section of the TCT in Armenia from Alaverdi to Haghartsin monastery with my friend Rhodri, gathering route data for the TCT team and testing out the route in the opposite direction to previous scouters. Sadly due to injury we didn't manage to hike our planned TCT section in Georgia, but we'll be back!
+In July 2018 I hiked an unbuilt 100km section of the TCT in Armenia from Alaverdi to Haghartsin monastery with my friend Rhodri gathering route data for the TCT team. Sadly due to injury we didn't manage to hike our planned TCT section in Georgia, but we'll be back!
 
 {% include slider.html selector="armenia_slider" %}
 
