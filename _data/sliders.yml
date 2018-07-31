@@ -31,9 +31,9 @@
 - selector: lofoten_slider
   captions: false
   images:
-    - src: /images/lofoten/1.jpg
-    - src: /images/lofoten/2.jpg
-    - src: /images/lofoten/3.jpg
+    - src: /images/lofoten/1a.jpg
+    - src: /images/lofoten/2a.jpg
+    - src: /images/lofoten/3a.jpg
     - src: /images/lofoten/4.jpg
     - src: /images/lofoten/5.jpg
     - src: /images/lofoten/6.jpg
