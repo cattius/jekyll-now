@@ -23,7 +23,7 @@ Media about the Svaneti expedition (the expedition report and TCT website blog p
 * [UBES blog post](https://www.ubes.co.uk/2017/10/10/georgia-tct-expedition-2017/)
 * [TCT website blog post](https://transcaucasiantrail.org/en/news/trip-report-university-of-bristol-students-on-the-tct/)
 * [Expedition report](https://drive.google.com/file/d/1LvphBVFmNrSdpPSneGse3QU-y5EuGFb4/view?usp=sharing)
-* [Trip video by Phil](https://www.youtube.com/watch?v=dwAOhqx-_E8)
+* [Video](https://www.youtube.com/watch?v=dwAOhqx-_E8)
 
 Since our trip, route guides have been published for the built section of trail in Svaneti. There are also route guides for the built trail sections around Dilijan. Note that the vast majority of the TCT is currently unbuilt; for all sections other than Svaneti/Dilijan it's a route rather than a trail at present (lots of bushwhacking - although many sections feature jeep tracks). Progress is being made each year by the TCT team and volunteers though! If you'd like to get involved with route scouting / testing as we did in Armenia, or with trailbuilding, get in touch with the TCT team.
 * [About the TCT](https://transcaucasiantrail.org/en/about/)
