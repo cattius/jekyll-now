@@ -62,7 +62,7 @@
     - src: /images/chamonix/10.jpg
     - src: /images/chamonix/11.jpg
   settings:
-    height: "'auto'"
+    height: "1536"
     effect: "'fade'"
 
 # svaneti slider
