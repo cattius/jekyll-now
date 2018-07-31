@@ -11,5 +11,5 @@ Our good old circuit-based digital computers are also full of secrets. Once you 
 
 # Research Projects
 * Undocumented CPU Behaviour:
-    * *'Automated Analysis of Undocumented Intel x86-64 Instructions'* (2018): [slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf) | [paper](https://github.com/cattius/opcodetester/blob/master/thesis.pdf) | [OpcodeTester tool](https://github.com/cattius/opcodetester)
+    * *'Automated Analysis of Undocumented Intel x86-64 Instructions'* (2018): [slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf), [paper](https://github.com/cattius/opcodetester/blob/master/thesis.pdf), [OpcodeTester tool](https://github.com/cattius/opcodetester)
     * Further investigation ongoing
