@@ -8,8 +8,8 @@ permalink: /adventures/
 * [John Muir Trail](/jmt), California, USA (2015)
 * [Lofoten Islands](/lofoten), Norway (2016)
 * [Chamonix](/chamonix), France (2017)
-* [Wester Ross](/wester), (2017)
-* [Austria](/austria), (2017, 2018)
+* [Wester Ross](/wester), Scotland (2017)
+* [Austria](/austria) (2017, 2018)
 * [Transcaucasian Trail](/tct), Georgia and Armenia (2017, 2018)
 * [Peaks of the Balkans Trail](/balkans), Montenegro, Kosovo and (mainly) Albania (2018)
 
