@@ -85,6 +85,26 @@
     height: "'auto'"
     effect: "'fade'"
 
+# wester ross slider
+# TODO
+- selector: wester_slider
+  captions: false
+  images:
+    - src: /images/wester/1.jpg
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# austria slider
+# TODO
+- selector: austria_slider
+  captions: false
+  images:
+    - src: /images/austria/1.jpg
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
 # armenia alaverdi-dilijan slider
 - selector: armenia_slider
   captions: false
@@ -107,7 +127,17 @@
 - selector: balkans_slider
   captions: false
   images:
-    - src: /images/1.jpg
+    - src: /images/balkans/1.jpg
+  settings:
+    height: "'auto'"
+    effect: "'fade'"
+
+# general hiking slider
+# TODO
+- selector: hiking_slider
+  captions: false
+  images:
+    - src: /images/hiking/1.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"
