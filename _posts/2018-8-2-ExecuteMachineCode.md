@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to execute undocumented opcodes (or arbitrary machine code) in C on Linux
+title: How to execute machine code within C programs on Linux
 tags: [blog, research, undocumentedCPU]
 ---
 
@@ -10,7 +10,7 @@ This is part of a series of blog posts on my [Undocumented x86-64 Opcodes](/#) r
 
 ## Executing
 
-To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!); and that the example code only allocates one page of memory (4096 bytes on most OSes), so if you have an exceptionally large amount of machine code to run you'll need more. TODO QUERY IF THE ARRAY IS ON THE STACK
+To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!); and that the example code only allocates one page of memory (4096 bytes on most OSes), so if you have an exceptionally large amount of machine code to run you'll need more.
 
 Using an array like this for our code means we don't need to worry about ASLR; although the memory address of the array will change each time the program is run, we don't need to know this address as we can just reference the array by name in our program. We can also easily modify the array's values. However, the rest of our code is static: if you want truly self-modifying code, you do need to work around ASLR (see [this post](/#) by Evan Klitzke for more details).
 
