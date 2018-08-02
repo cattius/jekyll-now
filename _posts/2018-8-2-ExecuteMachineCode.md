@@ -8,7 +8,7 @@ This is part of a series of blog posts on my Undocumented x86-64 Opcodes [resear
 
 ## Post Outline
 * [User mode](#user-mode)
-* [Handling exceptions in user mode]()
+* [Handling exceptions in user mode](#handling-exceptions)
 * [Kernel mode](#kernel-mode)
 
 # User Mode
@@ -162,7 +162,8 @@ int main(){
   printf("Successfully executed!\n");
 
   return 0;
-}```
+}
+```
 
 # Kernel Mode
 Executing machine code within a kernel driver is very similar. We need to use `__vmalloc` and `vfree` instead of `mprotect`, and `printk` instead of `printf`. `printk` outputs to the kernel log, which you can view with the terminal command `dmesg`. However, don't use `printk` too liberally! The system logs have no size limit by default, so if you were to *hypothetically* `printk` several lines each for several million instructions, and then repeat that quite a few times on a system that was running out of hard disk space anyway, you might *hypothetically* find yourself unable to boot until you cleared some space via the recovery console....(Totally not speaking from experience here.) If doing a lot of experimentation in a kernel driver it's definitely worth deleting old kernel logs regularly to free up space, and/or changing the config settings.
