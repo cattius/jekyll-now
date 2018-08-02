@@ -6,11 +6,16 @@ tags: [blog, research, undocumentedCPU]
 
 This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). When I started trying to test undocumented opcodes, I struggled to find a technique for integrating machine code into higher-level code - e.g. a C program automating the testing and analysis of millions of instructions. You can of course create a pure hex file and convert it into a binary, but that's a nightmare if you want to code the equivalent of thousands of lines of C! I hope you find these techniques for executing machine code in user mode and kernel mode useful. The user mode technique is adapted from several examples on GitHub (unfortunately I can't now find the original posts) and can also be implemented in [Python](https://stackoverflow.com/questions/6143042/how-can-i-call-inlined-machine-code-in-python-on-linux).
 
+## Post Outline
+* [User mode](#user-mode)
+* [Handling exceptions in user mode]()
+* [Kernel mode](#kernel-mode)
+
 # User Mode
 
 ## Function pointer to array
 
-To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the memory page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!). As an alternative, you could also compile your code with the `execstack` option instead.
+To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the memory page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!). As an alternative, you could compile your code with the `-z execstack` GCC option instead.
 
 Using an array like this for our code means we don't need to worry about ASLR; although the memory address of the array will change each time the program is run, we don't need to know this address as we can just reference the array by name in our program. We can also easily modify the array's values. However, the rest of our code is static: if you want truly self-modifying code, you do need to work around ASLR (see [this post](/https://eklitzke.org/memory-protection-and-aslr) by Evan Klitzke for more details).
 
@@ -80,10 +85,104 @@ int main(){
 }
 ```
 
-## Handling exceptions (signals)
+## Handling exceptions
+If you're only running machine code with valid opcodes (and you've written it correctly!), you don't need to do exception handling - getting an exception at runtime is a sign something's wrong with your code and you need to fix it. If you're doing automated testing of undocumented opcodes, however, an unfortunate fact of life is that most of them will fail. There are a range of possible Intel CPU exceptions, but in my testing I mostly only ever saw #UD (undefined instruction) and #GP (general protection) exceptions. In user mode, the kernel delivers these to our program as signals: #UD becomes SIG_ILL and #GP becomes SIG_SEGV.
 
-TODO
+[This section still TODO]
+
+```c
+#include <sys/mman.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <signal.h>
+extern char resume;
+
+void signalHandler(int sig, siginfo_t* siginfo, void* context){
+	/*abort if couldn't restore context - instructionFailed increasing
+	means we are stuck in a loop */
+	if(instrCurrentlyExecuting){
+		if(instructionFailed > 3) exit(1);
+		else{
+		//switch(sig){ /*check for signal type here if you want */ }
+	  instructionFailed++;
+		//get execution context, skip faulting instr, reset sign flag
+		mcontext_t* mcontext = &((ucontext_t*)context)->uc_mcontext;      
+		mcontext->gregs[IP]=(uintptr_t)&resume; 					
+		mcontext->gregs[REG_EFL]&=~0x100;       					
+		}
+	}
+	else{	//unexpected signal, restore default handlers
+		signal(SIGILL, SIG_DFL); signal(SIGFPE, SIG_DFL);
+		signal(SIGSEGV, SIG_DFL); signal(SIGBUS, SIG_DFL);
+		signal(SIGTRAP, SIG_DFL); signal(SIGABRT, SIG_DFL);
+	}
+}
+
+int main(){
+
+  //register signal handler for all likely signals
+  struct sigaction handler;
+  memset(&handler, 0, sizeof(handler));
+  handler.sa_sigaction = signalHandler;
+  handler.sa_flags = SA_SIGINFO;
+  if (sigaction(SIGILL, &handler, NULL) < 0   || \
+  	sigaction(SIGINT, &handler, NULL) < 0 	|| \
+  	sigaction(SIGFPE, &handler, NULL) < 0   || \
+  	sigaction(SIGSEGV, &handler, NULL) < 0  || \
+  	sigaction(SIGBUS, &handler, NULL) < 0   || \
+  	sigaction(SIGTRAP, &handler, NULL) < 0  || )
+  {
+  	perror("sigaction");
+  	return 1;
+  }
+
+  unsigned char code[7] = {0x55, 0x90, 0x90, 0x90, 0x90, 0x5d, 0xc3};
+
+  //pointer passed to mprotect must be aligned to page boundary
+  size_t pagesize = sysconf(_SC_PAGESIZE);
+  uintptr_t pagestart = ((uintptr_t) &code) & -pagesize;
+
+  if(mprotect((void*) pagestart, pagesize, PROT_READ|PROT_WRITE|PROT_EXEC)){
+    perror("mprotect");
+    return 1;
+  }
+
+  instrCurrentlyExecuting = true;
+  ((void(*)())code)();  //execute instruction
+  __asm__ __volatile__ ("\
+		.global resume   \n\
+		resume:          \n\
+		"
+		);
+	;
+	instrCurrentlyExecuting = false;
+
+  printf("Successfully executed!\n");
+
+  return 0;
+}```
 
 # Kernel Mode
+Executing machine code within a kernel driver is very similar. We need to use `__vmalloc` and `vfree` instead of `mprotect`, and `printk` instead of `printf`. `printk` outputs to the kernel log, which you can view with the terminal command `dmesg`. However, don't use `printk` too liberally! The system logs have no size limit by default, so if you were to *hypothetically* `printk` several lines each for several million instructions, and then repeat that quite a few times on a system that was running out of hard disk space anyway, you might *hypothetically* find yourself unable to boot until you cleared some space via the recovery console....(Totally not speaking from experience here.) If doing a lot of experimentation in a kernel driver it's definitely worth deleting old kernel logs regularly to free up space, and/or changing the config settings.
 
-TODO
+```c
+static unsigned char *code;
+opcode = __vmalloc(15, GFP_KERNEL, PAGE_KERNEL_EXEC);
+memset(opcode, 0, 15);
+opcode[0] = 0x55;
+opcode[1] = 0x90;
+opcode[2] = 0x90;
+opcode[3] = 0x90;
+opcode[4] = 0x90;
+opcode[5] = 0x55;
+opcode[6] = 0xc3;
+((void(*)(void))code)();
+printk(KERN_INFO "Successfully executed!\n");
+vfree(opcode);
+```
+
+This is the absolute bare minimum code required - there's a lot of boilerplate required to create an entire driver. Check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for an example (although it's certainly not a minimal template!).
+
+Just like the initial user mode code above, this code doesn't handle exceptions at all. You might think an exception in a kernel driver would be catastrophic, but the kernel actually seems to handle it pretty well. In testing on Ubuntu (16.10, 17.10, 18.04) I never managed to completely crash the system just by throwing a #UD or #GP exception; the exception was logged and then my user mode program interacting with the driver was killed. Once I started trying to *handle* exceptions however (so that my user mode program wouldn't die all the time), I managed to cause lots of chaos - handling exceptions in kernel mode is possible, but a bit trickier, so I've explained it in a [separate post](/ExceptionsKernelDriver).
