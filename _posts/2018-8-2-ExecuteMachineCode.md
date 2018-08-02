@@ -13,11 +13,11 @@ This is part of a series of blog posts on my Undocumented x86-64 Opcodes [resear
 
 # User Mode
 
-## Function pointer to array
+## Function pointer and mprotect
 
-To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the memory page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!). As an alternative, you could compile your code with the `-z execstack` GCC option instead.
+To execute our opcode we first create an unsigned char array (the distinction between unsigned/signed char is important when working with hex) called `code`. This array can be executed with `((void(*)())code)()`, which creates a void function pointer to the array and then calls that pointer. However, thanks to memory protection the stack (where our array lives at runtime) isn't executable, so if we run this our program will segfault and die. Luckily on Linux there is an easy workaround for this: we can use `mprotect` to make the memory page containing our array executable. Note that the pointer you pass to `mprotect` must be aligned to a page boundary, or it will fail (**always** remember to check system calls for error return values!). As an alternative, you could compile your code with the `-z execstack` GCC option instead. Neither option is good from a security perspective, so do bear that in mind if you're thinking of using this as part of a large project; if you don't need to modify your machine code at runtime, you could change the memory permissions to RX (PROT_READ|PROT_EXEC) instead of RWX so that it's no longer writable.
 
-Using an array like this for our code means we don't need to worry about ASLR; although the memory address of the array will change each time the program is run, we don't need to know this address as we can just reference the array by name in our program. We can also easily modify the array's values. However, the rest of our code is static: if you want truly self-modifying code, you do need to work around ASLR (see [this post](/https://eklitzke.org/memory-protection-and-aslr) by Evan Klitzke for more details).
+Using an array like this for our code means we don't need to worry about ASLR; although the memory address of the array will change each time the program is run, we don't need to know this address as we can just reference the array by name in our program. We can also easily modify the array's values. However, the rest of our code is static: if you want truly self-modifying code, [libjit](https://eli.thegreenplace.net/2013/10/17/getting-started-with-libjit-part-1/) is a C library specifically designed for Just-In-Time (JIT) programs generating and executing code at runtime.
 
 ## Function prologue and epilogue
 
@@ -88,7 +88,11 @@ int main(){
 ## Handling exceptions
 If you're only running machine code with valid opcodes (and you've written it correctly!), you don't need to do exception handling - getting an exception at runtime is a sign something's wrong with your code and you need to fix it. If you're doing automated testing of undocumented opcodes, however, an unfortunate fact of life is that most of them will fail. There are a range of possible Intel CPU exceptions, but in my testing I mostly only ever saw #UD (undefined instruction) and #GP (general protection) exceptions. In user mode, the kernel delivers these to our program as signals: #UD becomes SIG_ILL and #GP becomes SIG_SEGV.
 
-[This section still TODO]
+Intercepting a signal is as simple as registering a signal handler for that specific signal; the default behaviour (e.g. the program dying) will no longer occur. But this means we need to handle restoring execution in our signal handler - if we don't, the program will just hang! The code below shows one possible approach.
+
+I use the `instrCurrentlyExecuting` variable to first check the signal is an expected signal which we should be handling. If it didn't occur whilst an instruction was being tested, something has gone wrong - possibly a previously tested instruction corrupted the program state - so we restore the default signal handlers to clean up and kill the program. Similarly, we check we haven't had more than 3 signals for the same instruction: this means we are stuck in a signal loop. In testing, this is fairly rare but does still occur. I haven't yet determined what causes these loops; there's something that I'm not handling correctly!
+
+If these checks are passed, we then get the execution context, change the instruction pointer to the address of our `resume` global assembly label (thus skipping the instruction which threw the exception), and reset the sign flag; the program continues executing normally. (This technique is taken from Chris Domas' [Sandsifter tool](https://github.com/xoreaxeaxeax/sandsifter).) The `sig` number and `siginfo` struct provide useful information if you want to log details about the signal before returning from the signal handler. Note that signal handlers should be as fast and light as possible: setting a variable is a better way to store information than using `printf`, for example.
 
 ```c
 #include <sys/mman.h>
@@ -105,7 +109,6 @@ void signalHandler(int sig, siginfo_t* siginfo, void* context){
 	if(instrCurrentlyExecuting){
 		if(instructionFailed > 3) exit(1);
 		else{
-		//switch(sig){ /*check for signal type here if you want */ }
 	  instructionFailed++;
 		//get execution context, skip faulting instr, reset sign flag
 		mcontext_t* mcontext = &((ucontext_t*)context)->uc_mcontext;      
