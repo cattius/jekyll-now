@@ -4,14 +4,12 @@ title: How to handle CPU exceptions in a Linux kernel driver
 tags: [blog, research, undocumentedCPU]
 ---
 
-This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research).
-
-Previous research into undocumented opcodes (Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter)) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with #GP exceptions in ring 0, which can be an indication that an opcode exists but is privileged (although there are lots of other causes of #GP). I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. Along the way I spent many hours digging around in the Linux kernel figuring out how to handle #UD exceptions (to test millions of instructions at a time), and if you happen to have similarly misguided aims as me ('why of course I'll be deliberately running illegal instructions in the kernel') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
+This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). Previous research into undocumented opcodes (Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter)) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with #GP exceptions in ring 0, which can be an indication that an opcode exists but is privileged (although there are lots of other causes of #GP). I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. Along the way I spent many hours digging around in the Linux kernel figuring out how to handle #UD exceptions (to test millions of instructions at a time), and if you happen to have similarly misguided aims as me ('why of course I'll be deliberately running illegal instructions in the kernel') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
 
 ## Post Outline
 * [Linux kernel UD exception handling](#linux-kernel-ud-exception-handling)
 * [Die notifier solution for UD](#die-notifier-solution-for-ud)
-* [Unresolved - handling GP and PF](#unresolved-handling-gp-and-pf)
+* [Handling GP and PF](#handling-gp-and-pf)
 
 # Linux kernel UD exception handling
 
@@ -79,4 +77,5 @@ EXPORT_SYMBOL_GPL(unregister_die_notifier);
 
 # Die notifier solution for UD
 
-# Unresolved - handling GP and PF
+# Handling GP and PF
+Handling these exceptions is a work in progress - I haven't found a reliable method for resolving these yet, but I'm optimistic that it can be done.
