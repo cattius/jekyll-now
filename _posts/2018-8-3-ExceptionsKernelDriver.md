@@ -11,6 +11,7 @@ Note: exception-handling is architecture specific, so the deep dive section belo
 ## Post Outline
 * [Deep dive into UD exception handling](#deep-dive-into-ud-exception-handling)
 * [Die notifier solution for UD](#die-notifier-solution-for-ud)
+* [What's going on with the instruction pointer?](#whats-going-on-with-the-instruction-pointer)
 * [Handling GP and PF](#handling-gp-and-pf)
 
 # Deep dive into UD exception handling
@@ -158,6 +159,66 @@ A die notifier turns out to be the closest equivalent to a signal handler for a 
 
 
 # Die notifier solution for UD
+The code below demonstrates a simple die notifier for handling #UD exceptions. There's lots of potential to make mistakes (i.e. crash your computer) here, but thankfully I already made all the mistakes for you so you don't have to - pay close attention to the comments in the code! This isn't a complete driver, just the code required for the die notifier - check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for a full example. The instruction pointer incrementation to skip past the faulting instruction is exceptionally weird - see the next section for discussion.
+
+```c
+#include <linux/kdebug.h> //for die_notifier
+static int opcodeByteCount = 0;
+
+/* by returning NOTIFY_STOP we skip the call to die() in do_error_trap()
+but this means we miss important things like re-enabling interrupts!
+so we must do all these things here, otherwise the system freezes */
+static int opcode_die_event_handler (struct notifier_block *self, unsigned long event, void *data){
+    struct die_args* args = (struct die_args *)data;
+    if (prevExceptionsHandled < 2){
+
+    	if(args->trapnr == 6){ // #UD
+    		prevExceptionsHandled++;
+    		if(opcodeByteCount > 4) args->regs->ip += (opcodeByteCount - 2);
+    		else if(opcodeByteCount > 1) args->regs->ip += (opcodeByteCount);
+        //this works for 1-3 bytes as long as the instr doesn't page fault
+        //(shorter instrs more likely to - I assume missing expected addressing modes/operands)
+    		else return 0;
+    	  //below is equiv of unexported cond_local_irq_enable(args->regs);
+    	  if(args->regs->flags & X86_EFLAGS_IF){
+    		    local_irq_enable();
+    	  }
+    	  return NOTIFY_STOP;
+    	}
+
+    	else if(args->trapnr == 13 || args->trapnr == 14){
+    		//TODO: PF and GP handling. Note GP does not use do_error_trap - slightly different handler
+    		return 0;
+    	}
+    	else return 0;
+    }
+
+    else {
+    	//if too many exceptions or an event we cannot handle, play it safe and let the kernel handle the event and kill the program
+    	return 0;
+    }
+}
+
+//to set up notifier call chain
+static __read_mostly struct notifier_block opcode_die_notifier = {
+  .notifier_call = opcode_die_event_handler,
+  .next = NULL,
+  .priority = 0
+};
+
+/* this code below should go in a relevant function as required */
+register_die_notifier (&opcode_die_notifier);
+/* code for executing opcode goes here - see previous post.
+   set opcodeByteCount to the length of the faulting instruction
+   (ignore GCC function prologue/epilogue - just the instruction itself,
+   e.g. opcode = {0x55, 0x90, 0x5d, 0xc3}, opcodeByteCount = 1).
+   don't forget to vfree(opcode) after to avoid a memory leak
+   */
+unregister_die_notifier(&opcodeTesterKernel_die_notifier);  //this is crucial on exit to avoid crash when reloading driver
+```
+
+# What's going on with the instruction pointer?
+TODO
 
 # Handling GP and PF
 Handling these exceptions is a work in progress - I haven't found a reliable method for resolving these yet, but I'm optimistic that it can be done.
