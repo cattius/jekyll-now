@@ -14,8 +14,8 @@ Our good old circuit-based digital computers are also full of secrets. Once you 
 ## Undocumented CPU Behaviour:
 * Undocumented x86-64 opcodes
     * *'Automated Analysis of Undocumented Intel x86-64 Instructions'* (2018): [slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf), [paper](https://github.com/cattius/opcodetester/blob/master/thesis.pdf), [OpcodeTester tool](https://github.com/cattius/opcodetester)
-    * [How to execute undocumented opcodes (or arbitrary machine code) in C on Linux](/#)
-    * [How to handle CPU exceptions in a Linux kernel driver](/#)
+    * [How to execute machine code within C programs on Linux](/ExecuteMachineCode)
+    * [How to handle CPU exceptions in a Linux kernel driver](/ExceptionsKernelDriver)
     * [Exploring the vast search space of undocumented x86-64 opcodes](/#)
     * [Introducing OpcodeTester](/#)
 * Further investigation (MSRs, Intel ME, exception and decoding behaviour) ongoing
