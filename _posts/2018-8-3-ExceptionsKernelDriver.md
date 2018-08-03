@@ -4,7 +4,7 @@ title: How to handle CPU exceptions in a Linux kernel driver
 tags: [blog, research, undocumentedCPU]
 ---
 
-This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). Previous research into undocumented opcodes (Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter)) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with #GP exceptions in ring 0, which can be an indication that an opcode exists but is privileged (although there are lots of other causes of #GP). I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. Along the way I spent many hours digging around in the Linux kernel figuring out how to handle #UD exceptions (to test millions of instructions at a time), and if you happen to have similarly misguided aims as me ('why of course I'll be deliberately running illegal instructions in the kernel') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
+This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). Previous research into undocumented opcodes (Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter)) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with GP exceptions in ring 0, which can be an indication that an opcode exists but is privileged (although there are lots of other causes of GP). I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. Along the way I spent many hours digging around in the Linux kernel figuring out how to handle UD exceptions (to test millions of instructions at a time), and if you happen to have similarly misguided aims as me ('*why of course I'll be deliberately running illegal instructions in the kernel*') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
 
 Note: exception-handling is architecture specific, so the deep dive section below is only valid for x86/x86-64. The odd observed instruction pointer behaviour used to implement the die notifier solution is likely microarchitecture-specific and has only been tested on an Intel x86-64 Broadwell processor; test with caution in a VM first before trying on bare metal! If you get it wrong, you'll probably get an immediate CPU hang - restart asap. If you get very different results then please get in touch! I'm keen to understand why this odd behaviour with the instruction pointer occurs.
 
@@ -19,7 +19,7 @@ The code quoted in this section is from [arch/x86/kernel/traps.c](https://elixir
 
 When the processor detects an interrupt or exception, it stops execution of the code it was running and executes the relevant interrupt/exception handler. The handler deals with the interrupt/exception and then returns from the interrupt execution context - it may return to the code that was running, or may return somewhere completely different if it can't recover from the exception (e.g. it decides to kill the program that was running, or a kernel panic is triggered if the exception's completely unrecoverable).
 
-Handlers are defined by the operating system and their addresses in memory are listed in the Interrupt Descriptor Table (IDT). The initial assembly code used to switch into the interrupt execution context isn't relevant here - check out the [Linux Insides guide](https://0xax.gitbooks.io/linux-insides/Interrupts/linux-interrupts-5.html) for details. For the purposes of this post, we can jump straight to the main functionality of `do_invalid_op`, the Linux x86 #UD exception handler. This handler is defined with the DO_ERROR macro and is actually just a call to `do_error_trap` with arguments specific to #UD. At some stage this `do_error_trap` function kills our program, which is what we want to avoid. So let's check it out and see how we might be able to hijack it.
+Handlers are defined by the operating system and their addresses in memory are listed in the Interrupt Descriptor Table (IDT). The initial assembly code used to switch into the interrupt execution context isn't relevant here - check out the [Linux Insides guide](https://0xax.gitbooks.io/linux-insides/Interrupts/linux-interrupts-5.html) for details. For the purposes of this post, we can jump straight to the main functionality of `do_invalid_op`, the Linux x86 UD exception handler. This handler is defined with the DO_ERROR macro and is actually just a call to `do_error_trap` with arguments specific to UD. At some stage this `do_error_trap` function kills our program, which is what we want to avoid. So let's check it out and see how we might be able to hijack it.
 
 ```c
 static void do_error_trap(struct pt_regs *regs, long error_code, char *str,
@@ -159,7 +159,7 @@ A die notifier turns out to be the closest equivalent to a signal handler for a 
 
 
 # Die notifier solution for UD
-The code below demonstrates a simple die notifier for handling #UD exceptions. There's lots of potential to make mistakes (i.e. crash your computer) here, but thankfully I already made all the mistakes for you so you don't have to - pay close attention to the comments in the code! This isn't a complete driver, just the code required for the die notifier - check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for a full example. The instruction pointer incrementation to skip past the faulting instruction is exceptionally weird - see the next section for discussion.
+The code below demonstrates a simple die notifier for handling UD exceptions. There's lots of potential to make mistakes (i.e. crash your computer) here, but thankfully I already made all the mistakes for you so you don't have to - pay close attention to the comments in the code! This isn't a complete driver, just the code required for the die notifier - check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for a full example. The instruction pointer incrementation to skip past the faulting instruction is exceptionally weird - see the next section for discussion.
 
 ```c
 #include <linux/kdebug.h> //for die_notifier
@@ -172,23 +172,23 @@ static int opcode_die_event_handler (struct notifier_block *self, unsigned long 
     struct die_args* args = (struct die_args *)data;
     if (prevExceptionsHandled < 2){
 
-    	if(args->trapnr == 6){ // #UD
-    		prevExceptionsHandled++;
-    		if(opcodeByteCount > 4) args->regs->ip += (opcodeByteCount - 2);
-    		else if(opcodeByteCount > 1) args->regs->ip += (opcodeByteCount);
+    	if(args->trapnr == 6){ // UD exception
+        prevExceptionsHandled++;
+        if(opcodeByteCount > 4) args->regs->ip += (opcodeByteCount - 2);
+        else if(opcodeByteCount > 1) args->regs->ip += (opcodeByteCount);
         //this works for 1-3 bytes as long as the instr doesn't page fault
         //(shorter instrs more likely to - I assume missing expected addressing modes/operands)
-    		else return 0;
-    	  //below is equiv of unexported cond_local_irq_enable(args->regs);
-    	  if(args->regs->flags & X86_EFLAGS_IF){
-    		    local_irq_enable();
-    	  }
+        else return 0;
+        //below is equiv of unexported cond_local_irq_enable(args->regs);
+        if(args->regs->flags & X86_EFLAGS_IF){
+          local_irq_enable();
+        }
     	  return NOTIFY_STOP;
     	}
 
     	else if(args->trapnr == 13 || args->trapnr == 14){
-    		//TODO: PF and GP handling. Note GP does not use do_error_trap - slightly different handler
-    		return 0;
+        //TODO: PF and GP handling. Note GP does not use do_error_trap - slightly different handler
+        return 0;
     	}
     	else return 0;
     }
