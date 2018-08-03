@@ -4,9 +4,9 @@ title: How to handle CPU exceptions in a Linux kernel driver
 tags: [blog, research, undocumentedCPU]
 ---
 
-This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). Previous research into undocumented opcodes (Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter)) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with GP exceptions in ring 0, which can be an indication that an opcode exists but is privileged (although there are lots of other causes of GP). I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. Along the way I spent many hours digging around in the Linux kernel figuring out how to handle UD exceptions (to test millions of instructions at a time), and if you happen to have similarly misguided aims as me ('*why of course I'll be deliberately running illegal instructions in the kernel*') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
+This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). Previous research into undocumented opcodes such as Chris Domas' [Sandsifter project](https://github.com/xoreaxeaxeax/sandsifter) had tested them in ring 3 (user mode), but not in ring 0 (kernel mode). I was very keen to test out opcodes in ring 0 because many of them failed with GP exceptions in ring 0. GP can be an indication that an opcode exists but is privileged, although there are lots of other causes too. I was convinced I was going to discover some really interesting undocumented instructions if only I could run them in ring 0. Spoiler alert: sadly this wasn't the case. But along the way I spent a lot of time digging around in the Linux kernel and figured out how to handle UD exceptions to test millions of instructions at a time. If you happen to have similarly misguided aims as me ('*why of course I'll be deliberately running illegal instructions in the kernel*') then I have a solution for you! The only resources I could find suggested modifying the Interrupt Descriptor Table (IDT) or modifying the kernel code and rebuilding it; this solution requires neither and can all be done in C from within your kernel driver.
 
-Note: exception-handling is architecture specific, so the deep dive section below is only valid for x86/x86-64. The odd observed instruction pointer behaviour used to implement the die notifier solution is likely microarchitecture-specific and has only been tested on an Intel x86-64 Broadwell processor; test with caution in a VM first before trying on bare metal! If you get it wrong, you'll probably get an immediate CPU hang - restart asap. If you get very different results then please get in touch! I'm keen to understand why this odd behaviour with the instruction pointer occurs.
+Note: exception-handling is architecture specific, so the deep dive section below is only valid for x86/x86-64.
 
 ## Post Outline
 * [Deep dive into UD exception handling](#deep-dive-into-ud-exception-handling)
@@ -154,12 +154,10 @@ int unregister_die_notifier(struct notifier_block *nb)
 EXPORT_SYMBOL_GPL(unregister_die_notifier);
 ```
 
-A die notifier turns out to be the closest equivalent to a signal handler for a kernel driver.
-
-
+A die notifier turns out to be the closest equivalent to a signal handler for a kernel driver! In fact, all we need to do to hijack the handler and stop it killing our program is register a die notifier (the only die notifier in the chain, in this case) in which we re-enable local interrupts (as we skip that line of very crucial code...), modify the instruction pointer so we can skip the faulting instruction, and return NOTIFY_STOP. We should also check we're not stuck in an exception loop - this is an indication we've failed to handle the exception correctly and will cause a system hang or kernel panic.
 
 # Die notifier solution for UD
-The code below demonstrates a simple die notifier for handling UD exceptions. There's lots of potential to make mistakes (i.e. crash your computer) here, but thankfully I already made all the mistakes for you so you don't have to - pay close attention to the comments in the code! This isn't a complete driver, just the code required for the die notifier - check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for a full example. The instruction pointer incrementation to skip past the faulting instruction is exceptionally weird - see the next section for discussion.
+The code below demonstrates a simple die notifier for handling UD exceptions. There's lots of potential to make mistakes (i.e. crash your computer) here, but thankfully I already made all the mistakes for you so you don't have to - pay close attention to the comments in the code! This isn't a complete driver, just the code required for the die notifier - check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for a full example. The instruction pointer incrementation to skip past the faulting instruction is exceptionally weird and may be **architecture-specific** - it's only been tested on an Intel Broadwell processor, so test with caution in a VM first before trying on bare metal! If it's wrong for your system, you'll probably get an immediate CPU hang - restart asap and try with different incrementation values. If you get different results from me then please get in touch! I'm really intrigued why this odd behaviour with the instruction pointer occurs. See the next section for further discussion of why it's so weird.
 
 ```c
 #include <linux/kdebug.h> //for die_notifier
@@ -218,7 +216,14 @@ unregister_die_notifier(&opcodeTesterKernel_die_notifier);  //this is crucial on
 ```
 
 # What's going on with the instruction pointer?
-TODO
+Let's take a closer look at two of the more mysterious lines of code from the solution.
+
+```c
+if(opcodeByteCount > 4) args->regs->ip += (opcodeByteCount - 2);
+else if(opcodeByteCount > 1) args->regs->ip += (opcodeByteCount);
+```
+
+This indicates something very strange I discovered by trial-and-error (ft. lots and lots of CPU hangs) whilst developing the solution. According to the Intel Software Developer's manual, UD exceptions are thrown during decoding (before execution) of an instruction, and the return IP address is the address of the start of the instruction. So to skip past the instruction, we should simply need to increment the IP by opcodeByteCount, and this is the case if the instruction is 1-4 bytes in length. But if it's 5 bytes or longer incrementing by opcodeByteCount causes crashes - the return IP address provided by the CPU appears to be *2 bytes into the instruction*, and I have no idea why. This is something I want to investigate further - I'm not sure whether it's a quirk of Intel's instruction decoder or whether Linux's interrupt handler is somehow reporting the wrong return IP.
 
 # Handling GP and PF
-Handling these exceptions is a work in progress - I haven't found a reliable method for resolving these yet, but I'm optimistic that it can be done.
+Handling these exceptions is a work in progress - I haven't found a reliable method for resolving these yet, but I'm optimistic that it can be done. Stay tuned for an update!
