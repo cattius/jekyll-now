@@ -14,9 +14,11 @@ Note: exception-handling is architecture specific, so the deep dive section belo
 * [Handling GP and PF](#handling-gp-and-pf)
 
 # Deep dive into UD exception handling
-When an #UD exception occurs, the kernel switches into the exception execution context (see [entry_64.S](https://github.com/torvalds/linux/blob/master/arch/x86/entry/entry_64.S)) and then calls `do_invalid_op`.
+The code quoted in this section is from [arch/x86/kernel/traps.c](https://elixir.bootlin.com/linux/latest/source/arch/x86/kernel/traps.c) and [kernel/notifier.c](https://elixir.bootlin.com/linux/latest/source/kernel/notifier.c) in v4.17.12 of the Linux kernel.
 
-The code quoted in this section is from [arch/x86/kernel/traps.c](https://elixir.bootlin.com/linux/latest/source/arch/x86/kernel/traps.c) and ... in v4.17.12 of the Linux kernel.
+When the processor detects an interrupt or exception, it stops execution of the code it was running and executes the relevant interrupt/exception handler. The handler deals with the interrupt/exception and then returns from the interrupt execution context - it may return to the code that was running, or may return somewhere completely different if it can't recover from the exception (e.g. it decides to kill the program that was running, or a kernel panic is triggered if the exception's completely unrecoverable).
+
+Handlers are defined by the operating system and their addresses in memory are listed in the Interrupt Descriptor Table (IDT). The initial assembly code used to switch into the interrupt execution context isn't relevant here - check out the [Linux Insides guide](https://0xax.gitbooks.io/linux-insides/Interrupts/linux-interrupts-5.html) for details. For the purposes of this post, we can jump straight to the main functionality of `do_invalid_op`, the Linux x86 #UD exception handler. This handler is defined with the DO_ERROR macro and is actually just a call to `do_error_trap` with arguments specific to #UD. At some stage this `do_error_trap` function kills our program, which is what we want to avoid. So let's check it out and see how we might be able to hijack it.
 
 ```c
 static void do_error_trap(struct pt_regs *regs, long error_code, char *str,
@@ -134,7 +136,7 @@ int notrace notify_die(enum die_val val, const char *str,
 NOKPROBE_SYMBOL(notify_die);
 ```
 
-Hmm, so it returns the result of the `atomic_notifier_call_chain`. Intriguingly, these two functions are right below `notify_die` in kernel/notifier.c:
+Hmm, so it returns the result of the `atomic_notifier_call_chain`. What might that be? Intriguingly, these two functions are right below `notify_die` in kernel/notifier.c:
 
 ```c
 int register_die_notifier(struct notifier_block *nb)
@@ -151,7 +153,7 @@ int unregister_die_notifier(struct notifier_block *nb)
 EXPORT_SYMBOL_GPL(unregister_die_notifier);
 ```
 
-A die notifier turns out to be the closest equivalent to a signal handler for a kernel driver. 
+A die notifier turns out to be the closest equivalent to a signal handler for a kernel driver.
 
 
 
