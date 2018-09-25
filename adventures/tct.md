@@ -36,3 +36,4 @@ Val Ismaili and Lea Geibel are currently the only people who have thru-hiked the
 * [Lea's Instagram](https://www.instagram.com/leainderwelt/)
 
 The Greater Caucasus TCT route is currently unhiked, although other hikers have completed similar traverses.
+* [Rich Hartfield](https://www.instagram.com/richhartfield/) is hiking from Sochi to Baku (summer 2018), mostly on the Russian side of the Russia-Georgia border
