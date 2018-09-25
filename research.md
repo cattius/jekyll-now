@@ -10,6 +10,12 @@ I'm particularly fascinated by how these areas interact. There's a deep symbiosi
 Our good old circuit-based digital computers are also full of secrets. Once you get down to the low-level software and hardware implementation details there's a lot of "unexpected" behaviour (unexpected by other developers...or sometimes even by the original developers/engineers!), and this almost always leads to security vulnerabilities - from Rowhammer, Meltdown and the Spectre class of vulnerabilities to the shadowy unknown workings of Intel ME / AMD PSP and undocumented CPU instructions and MSRs. I'm especially interested in **undocumented CPU behaviour, side channels, and information leakage**.
 
 # Research Projects
-* Undocumented CPU Behaviour:
+
+## Undocumented CPU Behaviour:
+* Undocumented x86-64 opcodes
     * *'Automated Analysis of Undocumented Intel x86-64 Instructions'* (2018): [slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf), [paper](https://github.com/cattius/opcodetester/blob/master/thesis.pdf), [OpcodeTester tool](https://github.com/cattius/opcodetester)
-    * Further investigation ongoing
+    * [How to execute machine code within C programs on Linux](/ExecuteMachineCode)
+    * [How to handle CPU exceptions in a Linux kernel driver](/ExceptionsKernelDriver)
+    * [Exploring the vast search space of undocumented x86-64 opcodes](/#)
+    * [Introducing OpcodeTester](/#)
+* Further investigation (MSRs, Intel ME, exception and decoding behaviour) ongoing
