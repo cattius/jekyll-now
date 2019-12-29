@@ -18,11 +18,40 @@
     effect: "'fade'"
 
 # jmt slider
-# TODO
 - selector: jmt_slider
   captions: false
   images:
-    - src: /images/1.jpg
+    - src: /images/jmt/1.jpg
+    - src: /images/jmt/2.jpg
+    - src: /images/jmt/3.jpg
+    - src: /images/jmt/4.jpg
+    - src: /images/jmt/5.jpg
+    - src: /images/jmt/6.jpg
+    - src: /images/jmt/7.jpg
+    - src: /images/jmt/8.jpg
+    - src: /images/jmt/9.jpg
+    - src: /images/jmt/10.jpg
+    - src: /images/jmt/11.jpg
+    - src: /images/jmt/12.jpg
+    - src: /images/jmt/13.jpg
+    - src: /images/jmt/14.jpg
+    - src: /images/jmt/15.jpg
+    - src: /images/jmt/16.jpg
+    - src: /images/jmt/17.jpg
+    - src: /images/jmt/18.jpg
+    - src: /images/jmt/19.jpg
+    - src: /images/jmt/20.jpg
+    - src: /images/jmt/21.jpg
+    - src: /images/jmt/22.jpg
+    - src: /images/jmt/23.jpg
+    - src: /images/jmt/24.jpg
+    - src: /images/jmt/25.jpg
+    - src: /images/jmt/26.jpg
+    - src: /images/jmt/27.jpg
+    - src: /images/jmt/28.jpg
+    - src: /images/jmt/29.jpg
+    - src: /images/jmt/30.jpg
+    - src: /images/jmt/31.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"
