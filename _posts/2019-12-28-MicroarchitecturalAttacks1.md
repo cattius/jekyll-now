@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Microarchitectural Attacks 1: Building Blocks
+title: Microarchitectural Attacks 1 - Building Blocks
 tags: [blog, research, microarchitecture, attacks]
 ---
 
