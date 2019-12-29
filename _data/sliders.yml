@@ -132,12 +132,31 @@
     height: "'auto'"
     effect: "'fade'"
 
-# general hiking slider
-# TODO
-- selector: hiking_slider
+# UBES slider
+- selector: ubes_slider
   captions: false
   images:
-    - src: /images/hiking/1.jpg
+    - src: /images/ubes/1.jpg
+    - src: /images/ubes/2.jpg
+    - src: /images/ubes/3.jpg
+    - src: /images/ubes/4.jpg
+    - src: /images/ubes/5.jpg
+    - src: /images/ubes/5a.jpg
+    - src: /images/ubes/6.jpg
+    - src: /images/ubes/6a.jpg
+    - src: /images/ubes/7.jpg
+    - src: /images/ubes/7a.jpg
+    - src: /images/ubes/8.jpg
+    - src: /images/ubes/8a.jpg
+    - src: /images/ubes/11.jpg
+    - src: /images/ubes/14.jpg
+    - src: /images/ubes/15.jpg
+    - src: /images/ubes/16.jpg
+    - src: /images/ubes/17.jpg
+    - src: /images/ubes/18.jpg
+    - src: /images/ubes/19.jpg
+    - src: /images/ubes/20.jpg
+    - src: /images/ubes/21.jpg
   settings:
     height: "'auto'"
     effect: "'fade'"

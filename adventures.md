@@ -13,7 +13,7 @@ permalink: /adventures/
 * [Transcaucasian Trail](/tct), Georgia and Armenia (2017, 2018)
 * [Peaks of the Balkans Trail](/balkans), Montenegro, Kosovo and (mainly) Albania (2018)
 * [Cape Wrath Trail](/wrath), Scotland (2019)
-* [UBES UK Trips](/ubes-uk): Lake District, Snowdonia, Lochaber, and others! (2015-2019)]
+* [UBES UK Trips](/ubes-uk), Lake District, Snowdonia, Lochaber, and elsewhere! (2015-2019)
 * [Kungsleden](/kungsleden), Sweden (upcoming 2020)
 
 # UBES Adventures

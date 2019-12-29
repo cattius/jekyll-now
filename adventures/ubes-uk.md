@@ -3,7 +3,7 @@ layout: page
 title: UBES UK Trips
 permalink: /ubes-uk/
 image_sliders:
-  - ubes-uk_slider
+  - ubes_slider
 ---
 
 During my MEng (2015-2019) the University of Bristol Expeditions Society (UBES) were my second family. At every opportunity we'd disappear off to the mountains: Snowdonia, the Lake District, the Brecon Beacons, Portland and the Peak District for climbing, Lochaber at New Year, and even once (as storms kept us from the mountains!) to the Cornish coast. 
@@ -12,4 +12,4 @@ I spent two years on the committee as Expeditions Officer (2016-17) and Developm
 
 UBES is [turning 60](https://checkout.matterpay.com/s/ubes/ZXZlbnQ6Njgz/ubes-60th-anniversary) this year! You can read more about the society's origins in the University of Bristol Trans-Continental Expedition 1960-61 [here](http://www.nonesuchexpeditions.com/bristol-expedition/contents.htm).  
 
-{% include slider.html selector="ubes-uk_slider" %}
+{% include slider.html selector="ubes_slider" %}
