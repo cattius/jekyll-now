@@ -1,10 +1,10 @@
 ---
 layout: post
-title: How to execute machine code within C programs on Linux
-tags: [blog, research, undocumentedCPU]
+title: Executing arbitrary machine code in C
+tags: [blog, research, opcodes]
 ---
 
-This is part of a series of blog posts on my Undocumented x86-64 Opcodes [research project](/research). When I started trying to test undocumented opcodes, I struggled to find a technique for integrating machine code into higher-level code. I wanted to create a C program automating the testing and analysis of millions of undocumented instructions, so it had to be machine code rather than assembly as there were no mnemonics for them. You can of course create a pure hex file and convert it into a binary, but that's a nightmare if you want to code the equivalent of thousands of lines of C! I hope you find these techniques for executing machine code in user mode and kernel mode useful. The user mode technique is adapted from several examples on GitHub (unfortunately I can't now find the original posts) and can also be implemented in [Python](https://stackoverflow.com/questions/6143042/how-can-i-call-inlined-machine-code-in-python-on-linux).
+This is part of a series of blog posts on undocumented opcode fuzzing. When I started trying to test undocumented opcodes, I struggled to find a technique for integrating machine code into higher-level code. I wanted to create a C program automating the testing and analysis of millions of undocumented instructions, so it had to be machine code rather than assembly as there were no mnemonics for them. You can of course create a pure hex file and convert it into a binary, but that's a nightmare if you want to code the equivalent of thousands of lines of C! I hope you find these techniques for executing machine code in user mode and kernel mode useful. The user mode technique is adapted from several examples on GitHub (unfortunately I can't now find the original posts) and can also be implemented in [Python](https://stackoverflow.com/questions/6143042/how-can-i-call-inlined-machine-code-in-python-on-linux).
 
 ## Post Outline
 * [User mode](#user-mode)
