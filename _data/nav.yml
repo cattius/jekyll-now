@@ -1,23 +1,8 @@
-- title: "Blog"
-  href: "/"
-
-- title: "Adventures"
-  subcategories:
-    - subtitle: "All Posts"
-      subhref: "/adventures"
-    - subtitle: "Hadrian's Wall Path"
-      subhref: ""
-    - subtitle: "John Muir Trail"
-      subhref: ""
-    - subtitle: "UBES"
-      subhref: ""
-    - subtitle: "Lofoten"
-      subhref: ""
-    - subtitle: "Transcaucasian Trail"
-      subhref: ""
-
-- title: "Tech"
-  href: "/tech"
-
 - title: "About"
   href: "/about"
+
+- title: "Blog"
+  href: "/blog"
+
+- title: "Adventures"
+  href: "/adventures"
