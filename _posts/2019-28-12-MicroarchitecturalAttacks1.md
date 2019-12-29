@@ -6,7 +6,7 @@ tags: [blog, research, microarchitecture, attacks]
 
 *This post is currently under construction*
 
-### Microarchitecture Basics
+## Microarchitecture Basics
 
 ### The Memory Hierarchy
 
