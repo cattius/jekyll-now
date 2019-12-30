@@ -40,7 +40,6 @@
     - src: /images/jmt/17.jpg
     - src: /images/jmt/18.jpg
     - src: /images/jmt/19.jpg
-    - src: /images/jmt/20.jpg
     - src: /images/jmt/21.jpg
     - src: /images/jmt/22.jpg
     - src: /images/jmt/23.jpg
@@ -53,7 +52,7 @@
     - src: /images/jmt/30.jpg
     - src: /images/jmt/31.jpg
   settings:
-    height: "'auto'"
+    height: "'13:10'"
     effect: "'fade'"
 
 # lofoten slider
