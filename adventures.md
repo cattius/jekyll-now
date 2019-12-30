@@ -6,14 +6,14 @@ permalink: /adventures/
 
 * [Hadrian's Wall Path](/hadrians), England (2014)
 * [John Muir Trail](/jmt), California, USA (2015)
+* [UBES UK Trips](/ubes-uk), Lake District, Snowdonia, Lochaber, and elsewhere! (2015-2019)
 * [Lofoten Islands](/lofoten), Norway (2016)
 * [Chamonix](/chamonix), France (2017)
+* [Transcaucasian Trail](/tct), Georgia and Armenia (2017, 2018)
 * [Wester Ross](/wester), Scotland (2017)
 * [Austria](/austria) (2017-present)
-* [Transcaucasian Trail](/tct), Georgia and Armenia (2017, 2018)
-* [Peaks of the Balkans Trail](/balkans), Montenegro, Kosovo and (mainly) Albania (2018)
+* [Peaks of the Balkans Trail](/balkans), Montenegro, Kosovo, mostly Albania (2018)
 * [Cape Wrath Trail](/wrath), Scotland (2019)
-* [UBES UK Trips](/ubes-uk), Lake District, Snowdonia, Lochaber, and elsewhere! (2015-2019)
 * [Kungsleden](/kungsleden), Sweden (upcoming 2020)
 
 # UBES Adventures
