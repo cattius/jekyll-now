@@ -187,6 +187,6 @@ printk(KERN_INFO "Successfully executed!\n");
 vfree(opcode);
 ```
 
-This is the absolute bare minimum code required - there's a lot of boilerplate required to create an entire driver. Check out [OpcodeTester's kernel driver](https://github.com/cattius/opcodetester/blob/master/code/src/kernel/opcodeTesterKernel.c) for an example (although it's certainly not a minimal template!).
+This is the absolute bare minimum code required - there's a lot of boilerplate required to create an entire driver.
 
 Just like the initial user mode code above, this code doesn't handle exceptions at all. You might think an exception in a kernel driver would be catastrophic, but the kernel actually seems to handle it pretty well. In testing on Ubuntu (16.10, 17.10, 18.04) I never managed to completely crash the system just by throwing a UD or GP exception; the exception was logged and then my user mode program interacting with the driver was killed. Once I started trying to *handle* exceptions however (so that my user mode program wouldn't die all the time), I managed to cause lots of chaos - handling exceptions in kernel mode is possible, but a bit trickier, so I've explained it in a [separate post](/ExceptionsKernelDriver).
