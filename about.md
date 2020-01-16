@@ -13,7 +13,7 @@ Previously I completed my MEng Computer Science at the University of Bristol, an
 When I'm not working on tech, you'll likely find me in the mountains. You can check out some of my adventures [here](/adventures).
 
 ## Teaching
-* Spring 2020: 7050.46 Embedded Security, Graz University of Technology (co-teaching practicals)
+* Spring 2020: [705046 Embedded Security](https://www.iaik.tugraz.at/course/embedded-security-705046-sommersemester-2020/), Graz University of Technology (practicals, TA)
 
 ## Talks
 * [Undocumented CPU Behavior: Analyzing Undocumented Opcodes on Intel x86-64](/images/undocumented-cpu-behavior.pdf) - IAIK, Graz University of Technology, June 2018
