@@ -14,7 +14,7 @@
     - src: /images/hadrians/10.jpg
     - src: /images/hadrians/11.jpg
   settings:
-    height: "'16:9'"
+    height: "'13:10'"
     effect: "'fade'"
 
 # jmt slider
