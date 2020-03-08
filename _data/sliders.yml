@@ -118,12 +118,12 @@
   captions: false
   images:
     - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
-    - src: /images/wester/1.jpg
+    - src: /images/wester/2.jpg
+    - src: /images/wester/3.jpg
+    - src: /images/wester/4.jpg
+    - src: /images/wester/5.jpg
+    - src: /images/wester/6.jpg
+    - src: /images/wester/7.jpg
   settings:
     height: "'16:9'"
     effect: "'fade'"
