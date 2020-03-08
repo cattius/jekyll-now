@@ -8,11 +8,12 @@ This is part of a series of blog posts on undocumented opcode fuzzing. Previous 
 
 Note: exception-handling is architecture specific, so the deep dive section below is only valid for x86/x86-64.
 
+**Update: since writing this post, I've since discovered that the canonical method for exception-handling in the kernel is to register fixup addresses in the exception table. See [here](https://www.kernel.org/doc/Documentation/x86/exception-tables.txt) and [here](https://kernelnewbies.org/FAQ/TestWpBit) for details.**
+
 ## Post Outline
 * [Deep dive into UD exception handling](#deep-dive-into-ud-exception-handling)
 * [Die notifier solution for UD](#die-notifier-solution-for-ud)
 * [What's going on with the instruction pointer?](#whats-going-on-with-the-instruction-pointer)
-* [Handling GP and PF](#handling-gp-and-pf)
 
 # Deep dive into UD exception handling
 The code quoted in this section is from [arch/x86/kernel/traps.c](https://elixir.bootlin.com/linux/latest/source/arch/x86/kernel/traps.c) and [kernel/notifier.c](https://elixir.bootlin.com/linux/latest/source/kernel/notifier.c) in v4.17.12 of the Linux kernel.
@@ -224,6 +225,3 @@ else if(opcodeByteCount > 1) args->regs->ip += (opcodeByteCount);
 ```
 
 This indicates something very strange I discovered by trial-and-error (ft. lots and lots of CPU hangs) whilst developing the solution. According to the Intel Software Developer's manual, UD exceptions are thrown during decoding (before execution) of an instruction, and the return IP address is the address of the start of the instruction. So to skip past the instruction, we *should* simply need to increment the IP by opcodeByteCount, and this is the case if the instruction is 1-4 bytes in length. But if it's 5 bytes or longer incrementing by opcodeByteCount causes crashes - the return IP address provided by the CPU appears to be *2 bytes into the instruction*, and I have no idea why. This is something I want to investigate further - I'm not sure whether it's a quirk of Intel's instruction decoder or whether Linux's interrupt handler is somehow reporting the wrong return IP.
-
-# Handling GP and PF
-Handling these exceptions is a work in progress - I haven't found a reliable method for resolving these yet, but I'm optimistic that it can be done. Stay tuned for an update!
