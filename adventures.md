@@ -14,7 +14,7 @@ permalink: /adventures/
 * [Austria](/austria) (2017-present)
 * [Peaks of the Balkans Trail](/balkans), Montenegro, Kosovo, mostly Albania (2018)
 * [Cape Wrath Trail](/wrath), Scotland (2019)
-* [Kungsleden](/kungsleden), Sweden (upcoming 2020)
+* [Kungsleden](/kungsleden), Sweden (2020)
 
 # UBES Adventures
 And some blog posts I wrote for UBES (University of Bristol Expeditions Society), who were my second family while I was at Bristol Uni:
