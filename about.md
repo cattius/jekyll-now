@@ -8,7 +8,7 @@ Hi, I'm Cat. I'm currently a PhD student at Graz University of Technology, resea
 
 Two research areas that particularly interest me - and which I'm examining from a microarchitectural perspective - are privacy (including surveillance and hardware backdoors) and the 'conflict' between energy efficiency and security. For the latter, I'm particularly intrigued by how we could rethink instruction set architectures and the memory subsystem to reduce this conflict.
 
-Previously I completed my MEng Computer Science at the University of Bristol, and interned on the Privacy and Civil Liberties team at [Palantir](https://www.palantir.com/pcl/) and at [SCISYS](https://www.scisys.com/). 
+Previously I completed my MEng Computer Science at the University of Bristol, and interned on the [Privacy and Civil Liberties team](https://www.palantir.com/pcl/) at Palantir and at [SCISYS](https://www.scisys.com/). 
 
 When I'm not working on tech, you'll likely find me in the mountains. You can check out some of my adventures [here](/adventures).
 
