@@ -21,4 +21,8 @@ When I'm not working on tech, you'll likely find me in the mountains. You can ch
 * [Establishing a Long Distance Trail: The Caucasus and UBES(ters)](/images/ubes-caucasus.pdf) - UBES 60th Anniversary Celebration, Bristol, February 2020
 
 ## Projects
-* **OpcodeTester**: fuzzing tool for undocumented opcodes on x86 and RISC-V. [Code](https://github.com/cattius/opcodetester) | [Slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf) | [Thesis](https://github.com/cattius/opcodetester/blob/master/thesis.pdf) | [Hacker News discussion](https://news.ycombinator.com/item?id=22517319)
+* **OpcodeTester**: fuzzing tool for undocumented opcodes on x86 and RISC-V.
+    * [Code](https://github.com/cattius/opcodetester)
+    * [Slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf)
+    * [Thesis](https://github.com/cattius/opcodetester/blob/master/thesis.pdf)
+    * [Hacker News discussion](https://news.ycombinator.com/item?id=22517319)
