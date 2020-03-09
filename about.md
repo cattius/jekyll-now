@@ -19,3 +19,6 @@ When I'm not working on tech, you'll likely find me in the mountains. You can ch
 * [UBES Expedition Planning Workshop](/images/exped-planning-workshop.pdf) - University of Bristol, May 2019
 * [Why Audit Your CPU? Searching for Undocumented CPU Behavior](/images/audit-cpu.pdf) - Third School on Security & Correctness, Graz University of Technology, September 2019
 * [Establishing a Long Distance Trail: The Caucasus and UBES(ters)](/images/ubes-caucasus.pdf) - UBES 60th Anniversary Celebration, Bristol, February 2020
+
+## Projects
+* **OpcodeTester**: fuzzing tool for undocumented opcodes on x86 and RISC-V. [Code](https://github.com/cattius/opcodetester) | [Slides](https://github.com/cattius/opcodetester/blob/master/presentation.pdf) | [Thesis](https://github.com/cattius/opcodetester/blob/master/thesis.pdf) | [Hacker News discussion](https://news.ycombinator.com/item?id=22517319)
