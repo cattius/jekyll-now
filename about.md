@@ -4,9 +4,9 @@ title: About
 permalink: /about/
 ---
 
-Hi, I'm Cat. I'm currently researching microarchitectural security (and obsessing over CPUs) in the [Core Security group](https://www.iaik.tugraz.at/research-area/securesystems/) at the Institute of Applied Information Processing and Communications.
+Hi, I'm Cat.
 
-Previously I completed my MEng Computer Science at the University of Bristol, and interned on the [Privacy and Civil Liberties team](https://www.palantir.com/pcl/) at Palantir and at [SCISYS](https://www.scisys.com/). 
+Currently @ Dynatrace; previously microarchitectural security (and obsessing over CPUs) @ [IAIK](https://www.iaik.tugraz.at/research-area/securesystems/), privacy and civil liberties engineering @ [Palantir]((https://www.palantir.com/pcl/)), MEng Computer Science @ [Bristol](http://www.bris.ac.uk/engineering/departments/computerscience/).
 
 When I'm not working on tech, you'll likely find me in the mountains. You can check out some of my adventures [here](/adventures).
 
