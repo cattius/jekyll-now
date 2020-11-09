@@ -6,7 +6,7 @@ permalink: /about/
 
 Hi, I'm Cat.
 
-Currently @ Dynatrace; previously microarchitectural security (and obsessing over CPUs) @ [IAIK](https://www.iaik.tugraz.at/research-area/securesystems/), privacy and civil liberties engineering @ [Palantir]((https://www.palantir.com/pcl/)), MEng Computer Science @ [Bristol](http://www.bris.ac.uk/engineering/departments/computerscience/).
+Currently @ Dynatrace; previously microarchitectural security @ [IAIK](https://www.iaik.tugraz.at/research-area/securesystems/), privacy and civil liberties engineering @ [Palantir](https://www.palantir.com/pcl/), MEng Computer Science @ [Bristol](http://www.bris.ac.uk/engineering/departments/computerscience/).
 
 When I'm not working on tech, you'll likely find me in the mountains. You can check out some of my adventures [here](/adventures).
 
